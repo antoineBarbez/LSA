@@ -1,0 +1,20 @@
+Compared class : bio2730
+Titre : Histologie
+Description: Etude de l'organisation fonctionnelle des tissus et organes des vertebres. Stades precoces de l'embryogenese. L'etre pluricellulaire. Tissus primaires 
+
+cri3260 : 0.333
+Titre : Stages pratiques
+Description : Experience pratique dans un des secteurs d'intervention ou d'analyse criminologique.
+
+dcm7163 : 0.45
+Titre : Gestion du changement et de la complexite organisationnelle
+Description : Ce cours vise a habiliter l'etudiant a utiliser des modeles diagnostiques complexes, a apprendre les theories des organisations dont sont issus les modeles diagnostiques courants, a identifier les principaux enjeux lies au changement organisationnel et a elaborer les programmes de gestion du changement qui tiennent compte de la complexite organisationnelle et de sa realite politique. Les principaux modeles et theories seront appliques a des cas concrets et vecus, qui permettront d'en apprecier les principaux facteurs de contingence et d'application. Principales theories des organisations et de gestion du changement, modeles diagnostiques pertinents, modeles d'organisation dynamique.
+
+dei1211 : 0.89
+Titre : Dessin et communication
+Description : Introduction a la representation graphique du projet; le dessin comme outil d'exploration et de representation des idees; acquisition des bases theoriques et pratiques des techniques de representation graphique utilisees en design d'interieur.
+
+lit3420 : 0.76
+Titre : Aspects theoriques et didactique des discours courants au secondaire
+Description : Initiation aux diverses approches analytiques des discours courants retenus par le programme d'etudes du francais langue maternelle au secondaire. Caracteristiques specifiques du fonctionnement de ces discours (faits divers, article d'information, reportage, lettre d'opinion, etc.) quant a la dynamique de leur composante. Analyse de scenarios de cours (lecons-types) portant sur les discours courants retenus a chaque niveau pour en degager la dynamique du processus d'apprentissage. Integration et pertinence des differents objectifs poursuivis dans l'elaboration d'un cours de francais axe sur le developpement langagier. Elaboration de scenarios de cours (en comprehension et en production). Strategies d'evaluation des pratiques d'ecriture et de comprehension. Elaboration d'examens de comprehension et de production de discours courants.
+
