@@ -16,35 +16,14 @@ def parse_args():
 
 #return an array whose elements are the words contained in the input string
 def getWords(inputString):
-	sentences = getSentences(inputString)
-
-	#array of words separated by some whitespace in the input string 
-	words1 = []
-	for sentence in sentences:
-		words1 += re.split('\s+', sentence)
-
-	#take care of the apostrophes, for example "there's" become "there-'s"
-	words2 = []
-	for w1 in words1:
-		words2 += re.split('(\'\w+)', w1)
-
-	#here we take care of concidering punctuation as words
-	words = []
-	for w2 in words2:
-
-		words += re.split('(?!\')(\W+)', w2)
+	WORD_SEPARATOR = r'(?:(?:&nbsp)?[\s.,:;?!()\\/\'\"])+'
+	words = re.split(WORD_SEPARATOR, inputString.strip().lower())
 
 	#remove occurences of empty strings in the array
 	stemmer = nltk.stem.snowball.FrenchStemmer()
 	words = [stemmer.stem(x) for x in words if x != '']
 
 	return words
-
-#return an array whose elements are the sentences contained in the input string
-def getSentences(inputString):
-
-	#we remove the '\n' character at the en of each line
-	return re.split('(?<=[\.\?\!])\s',inputString.strip('\n'))
 
 def getBagOfWords():
 	bagOfWords = []
@@ -153,4 +132,10 @@ def main():
 
 
 if __name__ == "__main__":
-	main()
+	#main()
+
+	text = "Ce cours vise a habiliter l'etudiant a utiliser des modeles diagnostiques complexes, a apprendre les theories des organisations dont sont issus les modeles diagnostiques courants, a identifier les principaux enjeux lies au changement organisationnel et a elaborer les programmes de gestion du changement qui tiennent compte de la complexite organisationnelle et de sa realite politique. Les principaux modeles et theories seront appliques a des cas concrets et vecus, qui permettront d'en apprecier les principaux facteurs de contingence et d'application. Principales theories des organisations et de gestion du changement, modeles diagnostiques pertinents, modeles d'organisation dynamique."
+
+	array = getWords(text)
+
+	print(array)
