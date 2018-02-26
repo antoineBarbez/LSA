@@ -1,0 +1,24 @@
+Compared class : mat1720
+Titre : Probabilites
+Description: Espace de probabilite. Analyse combinatoire. Probabilite conditionnelle. Independance. Variable aleatoire. Fonction de repartition et fonction generatrice. Esperance mathematique. Loi faible des grands nombres. Theoreme limite central.
+
+mat1720 : 1.0
+Titre : Probabilites
+Description : Espace de probabilite. Analyse combinatoire. Probabilite conditionnelle. Independance. Variable aleatoire. Fonction de repartition et fonction generatrice. Esperance mathematique. Loi faible des grands nombres. Theoreme limite central.
+
+mat1978 : 0.897899988241
+Titre : Probabilites et statistique
+Description : Probabilites, independance. Variables aleatoires. Esperance. Lois de probabilite. Vecteurs aleatoires. Loi des grands nombres, theoreme limite central. Intervalles de confiance. Regression lineaire. Test du khi-deux.
+
+stt3971 : 0.886097430704
+Titre : Statistique et probabilites en economie
+Description : Espace de probabilite; fonctions de distribution et de densite; principales distributions; fonction generatrice; fonction caracteristique; vecteurs aleatoires; loi multinormale; theoreme de limite centrale.
+
+mat3431 : 0.869133838672
+Titre : Theorie de l'optimisation
+Description : Optimisation avec contraintes. Multiplicateur de Lagrange, theoreme de Kuhn-Tucker. Calcul des variations. Commande optimale. Ensemble accessible. Principe de Pontryagin, cas lineaire. Loi de feedback. Methodes numeriques.
+
+mth2120 : 0.861209079997
+Titre : Analyse appliquee
+Description : Fonctions d'une variable complexe. Fonctions analytiques. Formule de Cauchy. Series de Laurent. Transformee en z. Calcul des residus. Distribution de Dirac. Theoreme d'echantillonnage. Series de Fourier. Coefficients d'Euler. Conditions de Dirichlet. Transformees de Fourier. Identite de Parseval. Convolution. Inversion de la transformee de Laplace.
+

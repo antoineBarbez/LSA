@@ -7,11 +7,13 @@ import argparse
 import os
 import nltk
 import time
+import LSA
 
 def parse_args():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("input")
-	parser.add_argument("--nb_recommendation", type=int, default=5)
+	parser.add_argument("--nb", type=int, default=5)
+	parser.add_argument("--dim", type=int, default=70)
 	return parser.parse_args()
 
 #return an array whose elements are the words contained in the input string
@@ -19,61 +21,45 @@ def getWords(inputString):
 	WORD_SEPARATOR = r'(?:(?:&nbsp)?[\s.,:;?!()\\/\'\"])+'
 	words = re.split(WORD_SEPARATOR, inputString.strip().lower())
 
-	#remove occurences of empty strings in the array
+	#stemming + remove the words of 1 or 2 letters
 	stemmer = nltk.stem.snowball.FrenchStemmer()
-	words = [stemmer.stem(x) for x in words if x != '']
+	words = [stemmer.stem(x) for x in words if len(x) > 2]
 
 	return words
 
-def getBagOfWords():
-	bagOfWords = []
 
-	for path,dirs,files in os.walk('PolyHEC/'):
-		for f in files:
-			classCode = f.split('.')[0]
-			description = getDescription(classCode)
-			bagOfWords += getWords(description)
-
-	return list(set(bagOfWords))
-
-def getClosestClasses(classCode, nbRec):
-	bagOfWords = getBagOfWords()
-	words_reverse_dictionary = {word:i for i, word in enumerate(bagOfWords)}
+'''
+	Returns the nbRec closest courses from the one given by classCode
+'''
+def getClosestClasses(classCode, nbRec, vectorsDim):
+	print("Preprocessing ...")
 
 	codes = []
-
 	for path,dirs,files in os.walk('PolyHEC/'):
 		for f in files:
-			classCode = f.split('.')[0]
-			codes.append(classCode)
+			classId = f.split('.')[0]
+			codes.append(classId)
+
+	if nbRec > len(codes):
+		print("You ask for more recommendations than the total number of courses")
+		nbRec = len(codes)
 
 	codes_reverse_dictionary = {code:i for i, code in enumerate(codes)}
 
-	start_time = time.clock()
-	term_document_matrix = np.zeros((len(bagOfWords),len(codes)), dtype=np.int16)
-	for code in codes:
-		j = codes_reverse_dictionary[code]
+	documents = [getWords(getDescription(code)) for code in codes]
+	lsa = LSA.LSA(documents)
 
-		description = getDescription(code)
-		words = getWords(description)
+	# to free memory
+	del documents
 
-		for word in words:
-			i = words_reverse_dictionary[word]
-			term_document_matrix[i,j] = term_document_matrix[i,j] + 1
+	distances = lsa.getDistances(codes_reverse_dictionary[classCode.upper()], vectorsDim)
+	maxIndexes = np.argsort(distances)[-nbRec:][::-1]
 
-	total_time = time.clock() - start_time
-
-	print(total_time)
-
-	CC = [
-		{"classCode" : "CRI3260", "distance": 0.333},
-		{"classCode" : "DCM7163", "distance": 0.450},
-		{"classCode" : "DEI1211", "distance": 0.890},
-		{"classCode" : "LIT3420", "distance": 0.760}
-	]
+	CC = [{"classCode" : codes[idx], "distance": distances[idx]} for idx in maxIndexes]
 
 	return CC
 
+# Returns the title of a course
 def getTitle(classCode):
 	classFilePath = "PolyHEC/" + classCode.upper() + ".txt"
 
@@ -90,6 +76,7 @@ def getTitle(classCode):
 
 	return title
 
+# Returns the description of a course
 def getDescription(classCode):
 	classFilePath = "PolyHEC/" + classCode.upper() + ".txt"
 
@@ -110,7 +97,8 @@ def getDescription(classCode):
 def main():
 	args = parse_args()
 	classCode = args.input
-	nbRec = args.nb_recommendation
+	nbRec = args.nb
+	vectorsDim = args.dim
 
 	outputFilePath = classCode.upper() + ".txt"
 
@@ -120,7 +108,7 @@ def main():
 	outputFile.write("Description: " + getDescription(classCode) + "\n")
 	outputFile.write("\n")
 
-	for cour in getClosestClasses(classCode, 5):
+	for cour in getClosestClasses(classCode, nbRec, vectorsDim):
 		outputFile.write(cour["classCode"].lower() + " : " + str(cour["distance"]) + "\n")
 		outputFile.write("Titre : " + getTitle(cour["classCode"]) + "\n")
 		outputFile.write("Description : " + getDescription(cour["classCode"]) + "\n")
@@ -132,10 +120,5 @@ def main():
 
 
 if __name__ == "__main__":
-	#main()
-
-	text = "Ce cours vise a habiliter l'etudiant a utiliser des modeles diagnostiques complexes, a apprendre les theories des organisations dont sont issus les modeles diagnostiques courants, a identifier les principaux enjeux lies au changement organisationnel et a elaborer les programmes de gestion du changement qui tiennent compte de la complexite organisationnelle et de sa realite politique. Les principaux modeles et theories seront appliques a des cas concrets et vecus, qui permettront d'en apprecier les principaux facteurs de contingence et d'application. Principales theories des organisations et de gestion du changement, modeles diagnostiques pertinents, modeles d'organisation dynamique."
-
-	array = getWords(text)
-
-	print(array)
+	main()
+		
