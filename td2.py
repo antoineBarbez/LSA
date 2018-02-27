@@ -16,6 +16,7 @@ def parse_args():
 	parser.add_argument("--dim", type=int, default=70)
 	return parser.parse_args()
 
+
 #return an array whose elements are the words contained in the input string
 def getWords(inputString):
 	WORD_SEPARATOR = r'(?:(?:&nbsp)?[\s.,:;?!()\\/\'\"])+'
@@ -27,9 +28,8 @@ def getWords(inputString):
 
 	return words
 
-
 '''
-	Returns the nbRec closest courses from the one given by classCode
+	Returns the nbRec closest courses from the one given in argument
 '''
 def getClosestClasses(classCode, nbRec, vectorsDim):
 	print("Preprocessing ...")
@@ -42,6 +42,7 @@ def getClosestClasses(classCode, nbRec, vectorsDim):
 
 	if nbRec > len(codes):
 		print("You ask for more recommendations than the total number of courses")
+		print("--nb will be set to: " + str(len(codes)))
 		nbRec = len(codes)
 
 	codes_reverse_dictionary = {code:i for i, code in enumerate(codes)}
@@ -51,6 +52,9 @@ def getClosestClasses(classCode, nbRec, vectorsDim):
 
 	# to free memory
 	del documents
+
+	if vectorsDim > len(lsa.words):
+		print("--dim is too large, will be set to: " + str(len(lsa.words)))
 
 	distances = lsa.getDistances(codes_reverse_dictionary[classCode.upper()], vectorsDim)
 	maxIndexes = np.argsort(distances)[-nbRec:][::-1]
@@ -120,5 +124,8 @@ def main():
 
 
 if __name__ == "__main__":
-	main()
+	if len(sys.argv) < 2:
+		print("This script has to be used as :\n\tpython td2.py classCode")
+		sys.exit(1)
 		
+	main()

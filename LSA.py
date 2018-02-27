@@ -14,6 +14,13 @@ class LSA(object):
 		self.TDM = self.getTDMatrix()
 
 
+	'''
+		This method is used to setup all the variables related to terms/words 
+		that will be usefull for the rest of the computation.
+
+		To reduce the number of terms, we only concidere words that appears
+		in more than one document
+	'''
 	def setupWords(self):
 		words = list(set([word for doc in self.documents for word in doc]))
 		words_reverse_dictionary = {word:i for i, word in enumerate(words)}
@@ -42,12 +49,15 @@ class LSA(object):
 		return term_document_matrix
 
 	def cosine(self, a, b):
+		#to avoid problems with division by zero
 		if (np.linalg.norm(a) * np.linalg.norm(b)) == 0:
 			return 0
 
 		return float(np.dot(a, b.T) / (np.linalg.norm(a) * np.linalg.norm(b)))
+	
 
-	def getDistances(self, index, rank=100):
+	# returns the distances between the document at the given index and all the documents 
+	def getDistances(self, index, rank):
 		print("Performing SVD ...")
 		Uk, Sk,Vkt = svds(self.TDM, rank)
 
@@ -63,15 +73,5 @@ class LSA(object):
 if __name__ == "__main__":
 	lsa = LSA([['a','b','a'],['a','b','c','b'],['a','d']])
 
-	#print(lsa.getDistances(0,3))
+	print(lsa.getDistances(0,3))
 
-	#lsa.getTDMApprox(2)
-
-	#a = np.array([1,2,3])
-	#b = np.array([[1,2,3],[4,5,6],[7,8,9]])
-	#print(range(3))
-
-
-	#a = 5/np.array([1,2,3,4,5])
-
-	#print(a)
