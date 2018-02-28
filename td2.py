@@ -8,12 +8,13 @@ import os
 import nltk
 import time
 import LSA
+import pickle
 
 def parse_args():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("input")
 	parser.add_argument("--nb", type=int, default=5)
-	parser.add_argument("--dim", type=int, default=70)
+	parser.add_argument("--dim", type=int, default=40)
 	return parser.parse_args()
 
 
@@ -32,29 +33,34 @@ def getWords(inputString):
 	Returns the nbRec closest courses from the one given in argument
 '''
 def getClosestClasses(classCode, nbRec, vectorsDim):
-	print("Preprocessing ...")
 
-	codes = []
-	for path,dirs,files in os.walk('PolyHEC/'):
-		for f in files:
-			classId = f.split('.')[0]
-			codes.append(classId)
+	dataPath = "data.pickle"
+	if os.path.isfile(dataPath):
+		print("Loadind data ...")
+		with open(dataPath, 'r') as file:
+			codes, codes_reverse_dictionary, documents = pickle.load(file)
+
+	else:
+		print("Preprocessing ...")
+		codes = []
+		for path,dirs,files in os.walk('PolyHEC/'):
+			for f in files:
+				classId = f.split('.')[0]
+				codes.append(classId)
+		codes_reverse_dictionary = {code:i for i, code in enumerate(codes)}
+		documents = [getWords(getDescription(code)) + getWords(getTitle(code)) for code in codes]
+
+		#saving data
+		data = (codes, codes_reverse_dictionary, documents)
+		with open(dataPath, 'wb') as file:
+				pickle.dump(data, file, protocol=pickle.HIGHEST_PROTOCOL)
 
 	if nbRec > len(codes):
 		print("You ask for more recommendations than the total number of courses")
 		print("--nb will be set to: " + str(len(codes)))
 		nbRec = len(codes)
 
-	codes_reverse_dictionary = {code:i for i, code in enumerate(codes)}
-
-	documents = [getWords(getDescription(code)) for code in codes]
 	lsa = LSA.LSA(documents)
-
-	# to free memory
-	del documents
-
-	if vectorsDim > len(lsa.words):
-		print("--dim is too large, will be set to: " + str(len(lsa.words)))
 
 	distances = lsa.getDistances(codes_reverse_dictionary[classCode.upper()], vectorsDim)
 	maxIndexes = np.argsort(distances)[-nbRec:][::-1]
